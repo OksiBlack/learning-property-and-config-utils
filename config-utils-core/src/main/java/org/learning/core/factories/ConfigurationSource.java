@@ -40,7 +40,7 @@ import org.apache.logging.log4j.util.LoaderUtil;
  */
 public class ConfigurationSource {
     /**
-     * ConfigurationRetriever to use with Configurations that do not require a "real" configuration source.
+     * ConfigurationPropertyRetriever to use with Configurations that do not require a "real" configuration source.
      */
     public static final ConfigurationSource NULL_SOURCE = new ConfigurationSource(new byte[0]);
 
@@ -51,7 +51,7 @@ public class ConfigurationSource {
     private final byte[] data;
 
     /**
-     * Constructs a new {@code ConfigurationRetriever} with the specified input stream that originated from the specified
+     * Constructs a new {@code ConfigurationPropertyRetriever} with the specified input stream that originated from the specified
      * file.
      *
      * @param stream the input stream
@@ -66,7 +66,7 @@ public class ConfigurationSource {
     }
 
     /**
-     * Constructs a new {@code ConfigurationRetriever} with the specified input stream that originated from the specified
+     * Constructs a new {@code ConfigurationPropertyRetriever} with the specified input stream that originated from the specified
      * url.
      *
      * @param stream the input stream
@@ -81,7 +81,7 @@ public class ConfigurationSource {
     }
 
     /**
-     * Constructs a new {@code ConfigurationRetriever} with the specified input stream. Since the stream is the only source
+     * Constructs a new {@code ConfigurationPropertyRetriever} with the specified input stream. Since the stream is the only source
      * of data, this constructor makes a copy of the stream contents.
      *
      * @param stream the input stream
@@ -190,9 +190,9 @@ public class ConfigurationSource {
     }
 
     /**
-     * Returns a new {@code ConfigurationRetriever} whose input stream is reset to the beginning.
+     * Returns a new {@code ConfigurationPropertyRetriever} whose input stream is reset to the beginning.
      *
-     * @return a new {@code ConfigurationRetriever}
+     * @return a new {@code ConfigurationPropertyRetriever}
      * @throws IOException if a problem occurred while opening the new input stream
      */
     public ConfigurationSource resetInputStream() throws IOException {
