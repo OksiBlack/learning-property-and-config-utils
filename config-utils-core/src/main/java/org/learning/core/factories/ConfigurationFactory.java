@@ -1,4 +1,4 @@
-package org.learning.core.properties;
+package org.learning.core.factories;
 
 public abstract class ConfigurationFactory {
 

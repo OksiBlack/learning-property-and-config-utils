@@ -1,4 +1,4 @@
-package org.learning.core.properties;
+package org.learning.core.properties.util;
 
 import java.util.Map;
 import java.util.Properties;
@@ -8,7 +8,9 @@ import org.learning.core.utils.properties.IPropertiesSource;
 /**
  * Created by oksana_cherniavskaia on 18.10.2018.
  */
-public class PropertiesSource implements IPropertiesSource {
+public class PropertiesSource implements ISimplePropertiesSource {
+    public static final int DEFAULT_PRIORITY = 1;
+
 
     public static final PropertiesSource EMPTY_SOURCE = new PropertiesSource(new Properties());
     protected Properties properties;
@@ -26,29 +28,13 @@ public class PropertiesSource implements IPropertiesSource {
 
 
     public Properties getProperties() {
-        return get();
-    }
-
-    /**
-     * Gets a result.
-     *
-     * @return a result
-     */
-    @Override
-    public Properties get() {
         return properties;
     }
+
 
     @Override
     public int getPriority() {
         return priority;
-    }
-
-    @Override
-    public void forEach(final BiConsumer<String, String> action) {
-        for (final Map.Entry<Object, Object> entry : properties.entrySet()) {
-            action.accept(((String) entry.getKey()), ((String) entry.getValue()));
-        }
     }
 
 
@@ -58,3 +44,4 @@ public class PropertiesSource implements IPropertiesSource {
 
     }
 }
+

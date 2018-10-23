@@ -1,7 +1,5 @@
-package org.learning.core.properties;
+package org.learning.core.factories;
 
-
-import org.learning.core.properties.Configuration;
 
 /**
  * Created by oksana_cherniavskaia on 18.10.2018.

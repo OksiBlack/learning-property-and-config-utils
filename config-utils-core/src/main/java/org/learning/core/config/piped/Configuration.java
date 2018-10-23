@@ -1,8 +1,9 @@
-package org.learning.core.config;
+package org.learning.core.config.piped;
 
 
-import static org.learning.core.config.ConfigurationSource.FIND_NOTHING;
+import static org.learning.core.config.piped.ConfigurationPropertyRetriever.FIND_NOTHING;
 
+import co.unruly.config.SecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,75 +11,82 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Stream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.learning.core.config.piped.exceptions.ConfigurationPropertyNotFoundException;
 
 public class Configuration {
 
-    private final ConfigurationSource func;
+    public static final Logger logger = LogManager.getLogger();
+    private final ConfigurationPropertyRetriever func;
 
     public Configuration() {
         this(FIND_NOTHING);
     }
 
-    public Configuration(ConfigurationSource map) {
+    public Configuration(ConfigurationPropertyRetriever map) {
         this.func = map;
     }
 
-    public Optional<String> get(String s) {
-        return Optional.ofNullable(func.get(s));
+    public static Configuration from(ConfigurationPropertyRetriever func) {
+        return new Configuration(func);
+    }
+
+    public static Configuration of(ConfigurationPropertyRetriever... sources) {
+        return new Configuration(Stream.of(sources)
+            .reduce(FIND_NOTHING, ConfigurationPropertyRetriever::or));
+    }
+
+    public static ConfigurationPropertyRetriever map(Map<String, String> map) {
+        return map::get;
+    }
+
+    public static ConfigurationPropertyRetriever properties(String s) {
+        Properties properties = new Properties();
+
+        try {
+            properties.load(new FileReader(s));
+        } catch (IOException e) {
+            logger.error(e);
+        }
+
+        return properties::getProperty;
+    }
+
+    public static ConfigurationPropertyRetriever properties(Properties properties) {
+        return properties::getProperty;
+    }
+
+    public static ConfigurationPropertyRetriever systemProperties() {
+        return System::getProperty;
+    }
+
+    public static ConfigurationPropertyRetriever environment() {
+        return (key) -> System.getenv(key.toUpperCase());
+    }
+
+    public static ConfigurationPropertyRetriever secretsManager(String secretName, String region) {
+        return new SecretsManager(secretName, region)::get;
+    }
+
+    public static ConfigurationPropertyRetriever secretsManager(String secretName, String region, AWSSecretsManager client) {
+        return new SecretsManager(secretName, region, client)::get;
     }
 
     public String get(String s, String defaultValue) {
         return get(s).orElse(defaultValue);
     }
 
+    public Optional<String> get(String s) {
+        return Optional.ofNullable(func.get(s));
+    }
+
     public String require(String s) {
-        return get(s).orElseThrow(() -> new ConfigurationMissing(s));
+        return get(s).orElseThrow(() -> new ConfigurationPropertyNotFoundException(s));
     }
 
-    public Configuration or(ConfigurationSource next) {
+    public Configuration or(ConfigurationPropertyRetriever next) {
         return new Configuration(this.func.or(next));
-    }
-
-    public static Configuration from(ConfigurationSource func) {
-        return new Configuration(func);
-    }
-
-    public static Configuration of(ConfigurationSource... sources) {
-        return new Configuration(Stream.of(sources)
-                                       .reduce(FIND_NOTHING, ConfigurationSource::or));
-    }
-
-    public static ConfigurationSource map(Map<String, String> map){
-        return map::get;
-    }
-
-    public static ConfigurationSource properties(String s) {
-        Properties properties = new Properties();
-
-        try {
-            properties.load(new FileReader(s));
-        } catch (IOException e) {}
-
-        return properties::getProperty;
-    }
-    public static ConfigurationSource properties(Properties properties) {
-        return properties::getProperty;
-    }
-
-    public static ConfigurationSource systemProperties() {
-        return System::getProperty;
-    }
-
-    public static ConfigurationSource environment() {
-        return (key) -> System.getenv(key.toUpperCase());
-    }
-
-    public static ConfigurationSource secretsManager(String secretName, String region) {
-        return new SecretsManager(secretName, region)::get;
-    }
-
-    public static ConfigurationSource secretsManager(String secretName, String region, AWSSecretsManager client) {
-         return new SecretsManager(secretName, region, client)::get;
     }
 }
 

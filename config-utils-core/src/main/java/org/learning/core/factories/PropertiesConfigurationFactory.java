@@ -1,4 +1,4 @@
-package org.learning.core.properties;
+package org.learning.core.factories;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +18,7 @@ public class PropertiesConfigurationFactory extends ConfigurationFactory {
         try (final InputStream configStream = source.getInputStream()) {
             properties.load(configStream);
         } catch (final IOException ioe) {
-            throw new ConfigurationException("Unable to load " + source.toString(), ioe);
+            throw new ConfigurationException("Unable to getProperties " + source.toString(), ioe);
         }
         return new PropertiesConfigurationBuilder()
             .setConfigurationSource(source)

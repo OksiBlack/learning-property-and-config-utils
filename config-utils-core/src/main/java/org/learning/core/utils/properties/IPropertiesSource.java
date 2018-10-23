@@ -1,5 +1,6 @@
-package org.learning.core.propsonly;
+package org.learning.core.utils.properties;
 
+import java.util.Map;
 import java.util.Properties;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
@@ -7,15 +8,16 @@ import java.util.function.Supplier;
 /**
  * Created by oksana_cherniavskaia on 18.10.2018.
  */
-public interface IPropertiesSource extends Supplier<Properties> {
+public interface IPropertiesSource {
 
+
+    int DEFAULT_PRIORITY =1;
     /**
      * Gets a result.
      *
      * @return a result
      */
-    @Override
-    Properties get();
+    Map<String, Object> getProperties();
 
     /**
      * Returns the order in which this IPropertiesSource has priority. A higher value means that the source will be
@@ -23,13 +25,6 @@ public interface IPropertiesSource extends Supplier<Properties> {
      *
      * @return priority value
      */
-    int getPriority();
-
-    /**
-     * Iterates over all properties and performs an action for each key/value pair.
-     *
-     * @param action action to perform on each key/value pair
-     */
-    void forEach(BiConsumer<String, String> action);
+     int getPriority();
 
 }

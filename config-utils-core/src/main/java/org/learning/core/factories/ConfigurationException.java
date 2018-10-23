@@ -14,11 +14,10 @@
  * See the license for the specific language governing permissions and
  * limitations under the license.
  */
-package org.learning.core.properties;
+package org.learning.core.factories;
 
 /**
- * This exception is thrown when an error occurs reading from, parsing, using, or initializing the Log4j 2
- * configuration. It is also thrown if an appender cannot be created based on the configuration provided.
+ * This exception is thrown when an error occurs reading from, parsing, using, or initializing the configuration. It is also thrown if an appender cannot be created based on the configuration provided.
  */
 public class ConfigurationException extends RuntimeException {
 

@@ -14,11 +14,9 @@
  * See the license for the specific language governing permissions and
  * limitations under the license.
  */
-package org.learning.core.properties;
+package org.learning.core.factories;
 
 import java.io.IOException;
-import org.apache.logging.log4j.core.LifeCycle.State;
-import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
 
 /**

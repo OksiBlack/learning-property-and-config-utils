@@ -1,4 +1,4 @@
-package org.learning.core.properties;
+package org.learning.core.factories;
 
 /**
  * Created by oksana_cherniavskaia on 18.10.2018.

@@ -1,4 +1,4 @@
-package org.learning.core.utils.properties;
+package org.learning.core.properties.util;
 
 import java.util.Properties;
 
